@@ -1,0 +1,177 @@
+==============================
+TEORIA FLAGS DI PRINTF
+==============================
+
+printf("test : %-5.2d");
+
+%[flags][width][.precision][specifier]
+
+IF NOT FLAG POSSIBLE || .0  = STRING EMPTY
+
+
+In printf, le flags modificano il modo in cui un argomento viene
+convertito in stringa. Non cambiano il valore, ma influenzano:
+- allineamento
+- padding
+- segno
+- precisione
+- formato alternativo
+
+Ogni flag ha un comportamento specifico e non tutte le flags sono valide
+per tutti i tipi di conversione.
+
+---------------------------------
+FLAG '-'
+---------------------------------
+Significato logico:
+- Allinea l'output a sinistra all'interno del campo di larghezza minima
+- Senza '-' l'allineamento predefinito è a destra
+- Il padding residuo viene riempito con spazi
+
+Compatibilità specifier: 
+- c  (character)
+- s  (string)
+- p  (pointer)
+- d/i (signed integer)
+- u  (unsigned integer)
+- x/X (hexadecimal)
+- %  (percent)
+
+Nota: se presente, annulla la flag '0' per numeri.
+
+---------------------------------
+FLAG '0'
+---------------------------------
+Significato logico:
+- Usa lo zero come carattere di padding invece dello spazio
+- Solo se non è presente '-' e non è specificata una precisione
+- Gli zeri vengono inseriti prima delle cifre; il segno precede gli zeri
+
+Compatibilità specifier:
+- p  (pointer)
+- d/i (signed integer)
+- u  (unsigned integer)
+- x/X (hexadecimal)
+- %  (percent)
+
+Non valido con: c, s
+
+---------------------------------
+FLAG '.'
+---------------------------------
+Significato logico:
+- Introduce la precisione
+- Per numeri: indica il numero minimo di cifre, aggiungendo zeri se necessario
+- Se il numero è 0 e precisione è 0, stampa nulla
+- Per stringhe: numero massimo di caratteri da stampare
+
+Compatibilità specifier:
+- s  (string)
+- d/i (signed integer)
+- u  (unsigned integer)
+- x/X (hexadecimal)
+
+Non valido con: c, p, %
+
+Nota: disabilita la flag '0' per i numeri.
+
+---------------------------------
+FLAG '+'
+---------------------------------
+Significato logico:
+- Mostra sempre il segno per i numeri con segno
+- Numeri positivi mostrano '+', negativi '-'
+
+Compatibilità specifier:
+- d/i (signed integer)
+
+Non valido con: c, s, p, u, x/X, %
+
+Nota: annulla la flag spazio se presente.
+
+---------------------------------
+FLAG ' ' (spazio)
+---------------------------------
+Significato logico:
+- Per numeri positivi, stampa uno spazio al posto del segno
+- Numeri negativi mostrano '-' normalmente
+
+Compatibilità specifier:
+- d/i (signed integer)
+
+Non valido con: c, s, p, u, x/X, %
+
+Nota: ignorato se è presente '+'
+
+---------------------------------
+FLAG '#'
+---------------------------------
+Significato logico:
+- Abilita il formato alternativo
+- Per ottale: aggiunge prefisso '0'
+- Per esadecimale: aggiunge prefisso '0x' / '0X'
+- Per float: forza la presenza del punto decimale
+- Non influenza numeri decimali o stringhe
+
+Compatibilità specifier:
+- x/X (hexadecimal)
+- (anche float in printf standard)
+  
+Non valido con: c, s, p, d/i, u, %
+
+---------------------------------
+RIASSUNTO COMPATIBILITÀ FLAGS / SPECIFIER
+---------------------------------
+| Flag  | c  | s  | p  | d/i | u  | x/X | %  |
+|-------|----|----|----|-----|----|-----|----|
+| -     | ✔  | ✔  | ✔  | ✔   | ✔  | ✔   | ✔  |
+| 0     | ✖  | ✖  | ✔  | ✔   | ✔  | ✔   | ✔  |
+| .     | ✖  | ✔  | ✖  | ✔   | ✔  | ✔   | ✖  |
+| #     | ✖  | ✖  | ✖  | ✖   | ✖  | ✔   | ✖  |
+| +     | ✖  | ✖  | ✖  | ✔   | ✖  | ✖   | ✖  |
+| spazio| ✖  | ✖  | ✖  | ✔   | ✖  | ✖   | ✖  |
+
+---------------------------------
+NOTE FINALI
+---------------------------------
+- Le flags interagiscono tra loro secondo precise regole di precedenza:
+  1. '-' annulla '0'
+  2. '.' annulla '0' per numeri
+  3. '+' annulla spazio
+  4. '#' è indipendente e può combinarsi con altre flags compatibili
+- La conversion specification completa è definita come:
+  % [flags] [field width] [.precision] [length modifier] conversion specifier
+- È consigliato gestire le flags singolarmente prima di combinarle nella logica del parsing
+
+
+Tabella combinazioni flags # + - 0 .
+Combinazione flags	Flags ignorate	Note / Regole ISO C
+-	–	Left align, padding a destra
+0	–	Padding con zeri (solo se width, senza - e senza precisione numerica)
+.	–	Precisione su numeri / stringhe
++	–	Segno sempre mostrato per numeri signed
+space	–	Ignorata se + presente
+#	–	Alternate form, mai ignorata
+-0	0	- vince su 0 → padding a destra con spazi
+0-	0	idem
++space	space	+ vince su spazio
+space+	space	idem
+0.	0	Precisione su numeri override il padding con zeri
+.-	–	precision + left align, nessun conflitto
+-0.	0	- vince, precisione gestisce gli zeri
+0-.	0	idem
+#+	–	combinabili, nessun conflitto
++#	–	idem
+#0	– / 0 se precisione presente	# prima del padding; 0 funziona solo se nessuna precisione o -
+0#	idem	idem
+#.	–	precisione applicata dopo prefix (#)
+.-#	–	left align + precisione + prefix
++0	0 se precisione	+ + zero padding, ignorato se precision presente
+0+	idem	idem
+-+	0 se presente	- + +, left align con segno
+-+0	0	- vince, padding a destra
+-+.	0	left align, precisione gestita, 0 ignorata
+#0+	0 se precisione	prefix + segno + padding con zeri se permesso
+0+#	idem	idem
+#0.	0	precisione su numeri override 0
+-0#.	0	- vince, precisione gestisce gli zeri, # resta
