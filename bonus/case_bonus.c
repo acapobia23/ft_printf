@@ -1,14 +1,19 @@
 #include "ft_printf.h"
 
-static void	add_hashtag(char **bonus, const char *pre)
+static void	add_hashtag(char **bonus, char c)
 {
-	if (!(*bonus))
-	{
-		(*bonus) = ft_strdup("0x");
+	char	*tmp;
+
+	tmp = NULL;
+	if (c == 'x')
+		tmp = ft_strjoin("ox", (const char *)(*bonus));
+	else
+		tmp = ft_strjoin("oX", (const char *)(*bonus));
+	if (!tmp)
 		return ;
-	}
-	(*bonus)[0] = pre[0];
-	(*bonus)[1] = pre[1];
+	free((*bonus));
+	(*bonus) = NULL;
+	(*bonus) = tmp;
 }
 
 void	hashtag_case(char **bonus, t_value *value)
@@ -18,14 +23,21 @@ void	hashtag_case(char **bonus, t_value *value)
 	c = value->convs.conv;
 	if (value->convs.info.flags.precision == 0)
 		return ;
-	if (value->value[0] == '0')
+	if (ft_strlen((const char *)value->value) == 1
+			&& value->value[0] == '0')
 		return ;
-	if ((*bonus) && ft_strlen((const char *)(*bonus)) <= 2)
-		free((*bonus));
+	if (!(*bonus))
+	{
+		if (c == 'x')
+			(*bonus) = ft_strdup("0x");
+		else
+			(*bonus) = ft_strdup("0X");
+		return ;
+	}
 	if (c == 'x')
-		add_hashtag(&(*bonus), "0x");
+		add_hashtag(&(*bonus), 'x');
 	else
-		add_hashtag(&(*bonus), "0X");
+		add_hashtag(&(*bonus), 'X');
 }
 
 void	space_plus_case(char **bonus, t_value *value)
@@ -69,7 +81,7 @@ void	zero_case(char **bonus, t_value *value)
 	int	len;
 
 	pre = value->convs.info.flags.width;
-	l_value = ft_strlen((const char *)value->value);
+	l_value = value_len(value);
 	if (pre == 0)
 		return ;
 	else if (pre - l_value <= 0)

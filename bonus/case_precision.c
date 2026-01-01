@@ -45,8 +45,8 @@ static int	find_len(t_value *value)
 		value_l--;
 		pre++;
 	}
-	if (value_l > pre)
-		return (value_l);
+	if (value_l >= pre)
+		return (-1);
 	len = pre - value_l;
 	return (len);
 }
@@ -61,6 +61,8 @@ static void	precision_number(t_value *value)
 	zeros = NULL;
 	sign = false;
 	len = find_len(value);
+	if (len == -1)
+		return ;
 	zeros = malloc((len + 1) * sizeof(char));
 	if (!zeros)
 		return ;

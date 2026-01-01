@@ -90,4 +90,6 @@ void	space_plus_case(char **bonus, t_value *value);
 void	hashtag_case(char **bonus, t_value *value);
 void	minus_width_case(char **bonus, t_value **value);
 int		check_valid_args(t_value *value, char *args);
+int	value_len(t_value *value);
+
 #endif

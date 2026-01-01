@@ -1,5 +1,17 @@
 #include "ft_printf.h"
 
+int	value_len(t_value *value)
+{
+	int	len;
+
+	len = ft_strlen((const char *)value->value);
+	if (len == 0)
+		return (0);
+	else if (value->convs.info.flags.hashtag == true)
+		len +=2;
+	return (len);
+}
+
 void	shift_one_char(char **value)
 {
 	char	*tmp;
