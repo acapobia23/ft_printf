@@ -18,7 +18,7 @@ void test_mandatory(void)
     ret1 = printf("printf:    [%s]\n", "Hello World");
     ret2 = ft_printf("ft_printf: [%s]\n", "Hello World");
     printf("Return: %d vs %d\n", ret1, ret2);
-    // ret1 = printf("printf:    [%s]\n", (char *)NULL);
+    ret1 = printf("printf:    [%s]\n", (char *)NULL);
     ret2 = ft_printf("ft_printf: [%s]\n", (char *)NULL);
     printf("Return: %d vs %d\n\n", ret1, ret2);
     
@@ -37,7 +37,7 @@ void test_mandatory(void)
     ret1 = printf("printf:    [%d] [%i]\n", 42, -42);
     ret2 = ft_printf("ft_printf: [%d] [%i]\n", 42, -42);
     printf("Return: %d vs %d\n", ret1, ret2);
-    // ret1 = printf("printf:    [%d] [%i]\n", 0, -2147483648);
+    ret1 = printf("printf:    [%d] [%i]\n", 0, -2147483648);
     ret2 = ft_printf("ft_printf: [%d] [%i]\n", 0, -2147483648);
     printf("Return: %d vs %d\n\n", ret1, ret2);
     
@@ -159,7 +159,7 @@ void test_bonus_combinations(void)
     ret2 = ft_printf("ft_printf: [%-+10d]\n", 42);
     printf("Return: %d vs %d\n", ret1, ret2);
     
-    // ret1 = printf("printf:    [%010.5d]\n", 42);
+    ret1 = printf("printf:    [%010.5d]\n", 42);
     ret2 = ft_printf("ft_printf: [%010.5d]\n", 42);
     printf("Return: %d vs %d\n", ret1, ret2);
     

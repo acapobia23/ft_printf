@@ -45,6 +45,8 @@ static void	args_setup(t_value *value, va_list args)
 			*tmp = va_arg(args, unsigned int);
 		else if (c == 'p')
 			*tmp = va_arg(args, unsigned long);
+		if (!tmp)
+			value->arg = NULL;
 		value->arg = (void *)tmp;
 	}
 }

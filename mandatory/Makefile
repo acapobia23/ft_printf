@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wextra -Werror
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRCS =	ft_printf.c ft_itoa_base.c put_nbr.c main.c
+SRCS =	ft_printf.c ft_itoa_base.c put_nbr.c
 
 OBJS = $(SRCS:.c=.o)
 

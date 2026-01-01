@@ -5,9 +5,12 @@ char	*ft_pointer_itoa(t_value value)
 	char	*tmp;
 	char	*res;
 
-	if (value.arg == NULL)
-		return (ft_strdup("(nil)"));
 	tmp = ft_itoa_base(&value);
+	if (ft_strlen((const char *)tmp) == 1 && tmp[0] == '0')
+	{
+		free(tmp);
+		return (ft_strdup("(nil)"));
+	}
 	res = ft_strjoin("0x", (const char *)tmp);
 	free(tmp);
 	return (res);

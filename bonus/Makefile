@@ -3,7 +3,7 @@ NAME = libftprintf.a
 
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra
 
 
 LIBFT_DIR = libft
@@ -13,7 +13,7 @@ SRCS =	data.c data_utils.c data_utils_two.c \
 		ft_printf.c mtx_args.c  check_comb.c \
 		new_values.c new_value_utils.c case_precision.c \
 		case_bonus.c minus_width_case.c case_precision_utils.c \
-		check_valid_args.c main.c
+		check_valid_args.c main_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 
