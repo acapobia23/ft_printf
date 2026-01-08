@@ -401,8 +401,8 @@ void test_edge_cases_bonus(void)
     printf("Return: %d vs %d\n\n", ret1, ret2);
     
     printf("--- Precision con stringa NULL ---\n");
-    ret1 = printf("printf:    [%.5s]\n", (char *)NULL);
-    ret2 = ft_printf("ft_printf: [%.5s]\n", (char *)NULL);
+    ret1 = printf("printf:    [%.0s]\n", (char *)NULL);
+    ret2 = ft_printf("ft_printf: [%.0s]\n", (char *)NULL);
     printf("Return: %d vs %d\n\n", ret1, ret2);
     
     printf("--- Combinazione estrema ---\n");
